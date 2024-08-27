@@ -5,10 +5,13 @@ GOTEST = $(GOCMD) test
 GOCLEAN = $(GOCMD) clean
 
 build: clean
-	$(GOBUILD) -o $(target) ./cmd/$(target)
+	$(GOBUILD) -o ./dist/$(target) ./cmd/$(target)
 
-run: build
-	./$(target)
+build_docker:
+	docker build -f Dockerfile.$(target) .
+
+run:
+	godotenv -f .env go run cmd/$(target)/main.go
 
 # Test target
 test:
@@ -17,4 +20,4 @@ test:
 # Clean target
 clean:
 	$(GOCLEAN)
-	rm -f $(target)
+	rm -f ./dist/$(target)

@@ -1,0 +1,20 @@
+version: '3'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    environment:
+      - SERVER_ADDR=:1080
+      - CHALLENGE_TTL=2m
+      - CHALLENGE_VERSION=1
+      - CHALLENGE_DIFFICULITY=10
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    # Query example challenge, then 3 random quotes
+    command: ["./app", "-e", "1,2,2,2", "-h", "server", "-p", "1080"]
+    depends_on:
+      - server
